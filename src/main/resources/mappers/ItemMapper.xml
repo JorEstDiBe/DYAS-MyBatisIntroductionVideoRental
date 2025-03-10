@@ -5,7 +5,19 @@
   
 <mapper namespace="edu.unisabana.dyas.sampleprj.dao.mybatis.mappers.ItemMapper">
 
+    <resultMap type="Item" id="ItemResult">
+        <id property="id" column="item_id" />
+        <result property="nombre" column="item_nombre" />
+        <result property="descripcion" column="item_descripcion" />
+        <result property="fechaLanzamiento" column="item_fechalanzamiento" />
+        <result property="tarifaXDia" column="item_tarifaxdia" />
+        <result property="formatoRenta" column="item_formatorenta" />
+        <result property="genero" column="item_genero" />
 
+        <!-- Relación con TipoItem -->
+        <association property="tipo" javaType="TipoItem"
+                     resultMap="edu.unisabana.dyas.sampleprj.dao.mybatis.mappers.TipoItemMapper.TipoItemResult" />        
+    </resultMap>
     
     
 </mapper>

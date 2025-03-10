@@ -9,81 +9,49 @@
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
+        <!-- MyBatis Guice -->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-guice</artifactId>
             <version>3.10</version>
         </dependency>
+
+        <!-- MyBatis Core -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.4.5</version>
+        </dependency>
+
+        <!-- JUnit para pruebas -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
+            <scope>test</scope>
         </dependency>
+
+        <!-- Conector MySQL -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.44</version>
+            <version>8.0.33</version>
         </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.191</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.4.5</version> <!-- La versión puede variar -->
-        </dependency>
-
     </dependencies>
     
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>sql-maven-plugin</artifactId>
-                <version>1.5</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.h2database</groupId>
-                        <artifactId>h2</artifactId>
-                        <version>1.4.184</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <driver>org.h2.Driver</driver>                    
-                    <url>jdbc:h2:file:./target/db/testdb;MODE=MYSQL</url>
-                    <autocommit>true</autocommit>
-                    <skip>${maven.test.skip}</skip>
-                    <!-- Configuración para manejar errores de violación de clave primaria -->
-                    <onError>continue</onError>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>create-db</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <srcFiles>                                
-                                <srcFile>tables.sql</srcFile>                                
-                            </srcFiles>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+            <!-- Plugin para construir el JAR con dependencias -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version> <!-- La versión puede variar -->
+                <version>3.3.0</version>
                 <configuration>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <!-- Especifica la clase principal -->
                             <mainClass>edu.unisabana.dyas.samples.services.client.MyBatisExample</mainClass>
                         </manifest>
                     </archive>
@@ -100,12 +68,11 @@
             </plugin>
         </plugins>
     </build>
-        
-    
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+    <name>MyBATIS-Guice-DAO-VideorentalServicesLayer-Parte1</name>
 </project>

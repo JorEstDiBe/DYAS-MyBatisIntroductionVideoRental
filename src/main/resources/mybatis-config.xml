@@ -3,39 +3,33 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <!--<settings>
-        <setting name="logImpl" value="LOG4J"/>        
-    </settings>-->
     
-    <properties resource="config.properties">
-    </properties>
+    <properties resource="config.properties" />
+    
     <typeAliases>
         <typeAlias type="edu.unisabana.dyas.samples.entities.Cliente" alias="Cliente"/>
         <typeAlias type="edu.unisabana.dyas.samples.entities.Item" alias="Item"/>
         <typeAlias type="edu.unisabana.dyas.samples.entities.ItemRentado" alias="ItemRentado"/>
         <typeAlias type="edu.unisabana.dyas.samples.entities.TipoItem" alias="TipoItem"/>
-    </typeAliases>	
+    </typeAliases>
 
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC" />
             <dataSource type="POOLED">
-                <property name="driver" value="${driver}" />
-                <!--property name="url" value="jdbc:mysql://localhost:3306/video_rental"/!-->
-                <property name="url" value="${url}"/>
-                <property name="username" value="${username}" />
-                <property name="password" value="${password}" />
+                <property name="driver" value="com.mysql.cj.jdbc.Driver" />
+                <property name="url" value="jdbc:mysql://localhost:3306/rentas?serverTimezone=UTC"/>
+                <property name="username" value="root" />
+                <property name="password" value="12345" />
 
-                <!--property name="url" value="jdbc:mysql://localhost:3306/video_rental"/!-->
             </dataSource>
         </environment>
     </environments>
         
     <mappers>
-        <mapper resource="mappers/ClienteMapper.xml"></mapper>
-        <mapper resource="mappers/ItemMapper.xml"></mapper>
-        <mapper resource="mappers/TipoItemMapper.xml"></mapper>        
+        <mapper resource="mappers/ClienteMapper.xml"/>
+        <mapper resource="mappers/ItemMapper.xml"/>
+        <mapper resource="mappers/TipoItemMapper.xml"/>
     </mappers> 
-        
         
 </configuration>

@@ -5,7 +5,9 @@
   
 <mapper namespace="edu.unisabana.dyas.sampleprj.dao.mybatis.mappers.TipoItemMapper">
 
+    <resultMap type="TipoItem" id="TipoItemResult">
+        <id property="id" column="tipo_id" />
+        <result property="descripcion" column="tipo_descripcion" />
+    </resultMap>
     
-
-                
 </mapper>
