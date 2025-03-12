@@ -53,6 +53,7 @@ public class MyBatisExample {
         SqlSessionFactory sessionfact = getSqlSessionFactory();
 
         while (true) {
+            System.out.println("Hola :)");
             System.out.println("\nMENU PRINCIPAL");
             System.out.println("1. Ver resumen de clientes");
             System.out.println("2. Buscar un cliente");
@@ -86,7 +87,7 @@ public class MyBatisExample {
                         buscarItem(sqlss, idItem);
                         break;
                     case 6:
-                        System.out.println("Saliendo del programa...");
+                        System.out.println("Adios :(");
                         scanner.close();
                         return;
                     default:
@@ -123,9 +124,7 @@ public class MyBatisExample {
         ItemMapper itemMapper = sqlss.getMapper(ItemMapper.class);
         Item newItem = new Item();
 
-        System.out.print("Ingrese ID del item: ");
-        newItem.setId(scanner.nextInt());
-        scanner.nextLine();
+        // Eliminar la solicitud del ID, se generará automáticamente
         System.out.print("Ingrese nombre del item: ");
         newItem.setNombre(scanner.nextLine());
         System.out.print("Ingrese descripción del item: ");
@@ -142,13 +141,14 @@ public class MyBatisExample {
         System.out.print("Ingrese ID del tipo de item: ");
         int tipoId = scanner.nextInt();
         scanner.nextLine();
-        System.out.print("Ingrese descripción del tipo de item: ");
+        System.out.print("Ingrese tipo de item (Electrodomestico, Mueble, Herramienta): ");
         String tipoDesc = scanner.nextLine();
         newItem.setTipo(new TipoItem(tipoId, tipoDesc));
-        
+
         itemMapper.insertarItem(newItem);
         System.out.println("Item insertado exitosamente.");
     }
+
 
     public static void consultarItems(SqlSession sqlss) {
         ItemMapper itemMapper = sqlss.getMapper(ItemMapper.class);
