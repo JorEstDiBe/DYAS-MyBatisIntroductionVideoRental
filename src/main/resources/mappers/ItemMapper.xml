@@ -4,8 +4,8 @@
 
     <!-- Inserta un Item usando el objeto con alias "item" -->
     <insert id="insertarItem" parameterType="map">
-        INSERT INTO VI_ITEMS (id, nombre, descripcion, fechalanzamiento, tarifaxdia, formatorenta, genero, TIPOITEM_id)
-        VALUES (#{item.id}, #{item.nombre}, #{item.descripcion}, #{item.fechalanzamiento}, #{item.tarifaxdia}, #{item.formatorenta}, #{item.genero}, #{item.tipo.id});
+        INSERT INTO VI_ITEMS (nombre, descripcion, fechalanzamiento, tarifaxdia, formatorenta, genero, TIPOITEM_id)
+        VALUES (#{item.nombre}, #{item.descripcion}, #{item.fechalanzamiento}, #{item.tarifaxdia}, #{item.formatorenta}, #{item.genero}, #{item.tipo.id});
     </insert>
 
     <!-- Consulta todos los Items -->
