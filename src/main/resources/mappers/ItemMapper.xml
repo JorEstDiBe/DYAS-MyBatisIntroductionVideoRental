@@ -1,23 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.unisabana.dyas.sampleprj.dao.mybatis.mappers.ItemMapper">
 
-    <resultMap type="Item" id="ItemResult">
-        <id property="id" column="item_id" />
-        <result property="nombre" column="item_nombre" />
-        <result property="descripcion" column="item_descripcion" />
-        <result property="fechaLanzamiento" column="item_fechalanzamiento" />
-        <result property="tarifaXDia" column="item_tarifaxdia" />
-        <result property="formatoRenta" column="item_formatorenta" />
-        <result property="genero" column="item_genero" />
+    <!-- Inserta un Item usando el objeto con alias "item" -->
+    <insert id="insertarItem" parameterType="map">
+        INSERT INTO VI_ITEMS (id, nombre, descripcion, fechalanzamiento, tarifaxdia, formatorenta, genero, TIPOITEM_id)
+        VALUES (#{item.id}, #{item.nombre}, #{item.descripcion}, #{item.fechalanzamiento}, #{item.tarifaxdia}, #{item.formatorenta}, #{item.genero}, #{item.tipo.id});
+    </insert>
 
-        <!-- Relación con TipoItem -->
-        <association property="tipo" javaType="TipoItem"
-                     resultMap="edu.unisabana.dyas.sampleprj.dao.mybatis.mappers.TipoItemMapper.TipoItemResult" />        
+    <!-- Consulta todos los Items -->
+    <select id="consultarItems" resultMap="ItemResult">
+        SELECT 
+            id, nombre, descripcion, fechalanzamiento, tarifaxdia, formatorenta, genero, TIPOITEM_id
+        FROM VI_ITEMS;
+    </select>
+
+    <!-- Consulta un solo Item por su id -->
+    <select id="consultarItem" resultMap="ItemResult" parameterType="int">
+        SELECT 
+            id, nombre, descripcion, fechalanzamiento, tarifaxdia, formatorenta, genero, TIPOITEM_id
+        FROM VI_ITEMS
+        WHERE id = #{id};
+    </select>
+
+    <!-- Mapeo del resultado para un Item, incluyendo la asociación con TipoItem -->
+    <resultMap id="ItemResult" type="edu.unisabana.dyas.samples.entities.Item">
+        <id property="id" column="id"/>
+        <result property="nombre" column="nombre"/>
+        <result property="descripcion" column="descripcion"/>
+        <result property="fechalanzamiento" column="fechalanzamiento"/>
+        <result property="tarifaxdia" column="tarifaxdia"/>
+        <result property="formatorenta" column="formatorenta"/>
+        <result property="genero" column="genero"/>
+        <association property="tipo" 
+                     javaType="edu.unisabana.dyas.samples.entities.TipoItem" 
+                     column="TIPOITEM_id" 
+                     select="edu.unisabana.dyas.sampleprj.dao.mybatis.mappers.TipoItemMapper.getTipoItem"/>
     </resultMap>
-    
-    
+
 </mapper>

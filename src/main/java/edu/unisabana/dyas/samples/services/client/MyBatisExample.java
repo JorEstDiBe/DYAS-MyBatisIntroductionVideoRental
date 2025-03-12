@@ -17,10 +17,14 @@
 package edu.unisabana.dyas.samples.services.client;
 
 import edu.unisabana.dyas.sampleprj.dao.mybatis.mappers.ClienteMapper;
+import edu.unisabana.dyas.sampleprj.dao.mybatis.mappers.ItemMapper;
 import edu.unisabana.dyas.samples.entities.Cliente;
+import edu.unisabana.dyas.samples.entities.Item;
 import edu.unisabana.dyas.samples.entities.ItemRentado;
+import edu.unisabana.dyas.samples.entities.TipoItem;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import org.apache.ibatis.io.Resources;
@@ -40,6 +44,7 @@ public class MyBatisExample {
      *
      * @return instancia de SQLSessionFactory
      */
+    
     public static SqlSessionFactory getSqlSessionFactory() {
         SqlSessionFactory sqlSessionFactory = null;
         if (sqlSessionFactory == null) {
@@ -61,12 +66,65 @@ public class MyBatisExample {
      * @throws SQLException
      */
     public static void main(String[] args) throws SQLException {
-        SqlSessionFactory sessionfact = getSqlSessionFactory();
-        SqlSession sqlss = sessionfact.openSession();
+    System.out.println("RESUMEN DE CLIENTES: ");
+    SqlSessionFactory sessionfact = getSqlSessionFactory();
+    
+    // Usamos try-with-resources para asegurar el cierre al final
+    try (SqlSession sqlss = sessionfact.openSession()) {
+        // Obtener mapper de Cliente
         ClienteMapper cm = sqlss.getMapper(ClienteMapper.class);
         System.out.println(cm.consultarClientes());
+        
+        // Consultar un cliente específico
+        int id = 123456789;
+        Cliente cliente = cm.consultarCliente(id);
+        System.out.println("BUSQUEDA DE CLIENTE: ");
+        if (cliente != null) {
+            System.out.println("Cliente encontrado: "+ id);
+            System.out.println("Nombre: " + cliente.getNombre());
+            System.out.println("Telefono: " + cliente.getTelefono());
+            System.out.println("Direccion: " + cliente.getDireccion());
+            System.out.println("Email: " + cliente.getEmail());
+        } else {
+            System.out.println("Cliente no encontrado.");
+        }
+        
+        // Obtener mapper de Item
+        ItemMapper itemMapper = sqlss.getMapper(ItemMapper.class);
+        Item newItem = new Item();
+        newItem.setId(11);
+        newItem.setNombre("Nuevooo");
+        newItem.setDescripcion("Descrip");
+        newItem.setFechalanzamiento(Date.valueOf("2008-01-23"));
+        newItem.setTarifaxdia(1000);
+        newItem.setFormatorenta("Semanal");
+        newItem.setGenero("Mueble");
+        TipoItem tipoItem = new TipoItem(2, "Mueble");
+        newItem.setTipo(tipoItem);
+        itemMapper.insertarItem(newItem);
+        
+        System.out.println("LISTA DE ITEMS:");
+        System.out.println(itemMapper.consultarItems());
+        
+        Item itemConsultado = itemMapper.consultarItem(10);
+        if (itemConsultado != null) {
+            System.out.println("\nItem nuevo encontrado:");
+            System.out.println("ID: " + itemConsultado.getId());
+            System.out.println("Nombre: " + itemConsultado.getNombre());
+            System.out.println("Descripción: " + itemConsultado.getDescripcion());
+            System.out.println("Fecha Lanzamiento: " + itemConsultado.getFechalanzamiento());
+            System.out.println("Tarifa por día: " + itemConsultado.getTarifaxdia());
+            System.out.println("Formato renta: " + itemConsultado.getFormatorenta());
+            System.out.println("Género: " + itemConsultado.getGenero());
+            System.out.println("Tipo: " + itemConsultado.getTipo().getID() + ": " + itemConsultado.getTipo().getDescripcion());
+        } else {
+            System.out.println("Item no encontrado.");
+        }
+        
+        // Commit al finalizar todas las operaciones
         sqlss.commit();
-        sqlss.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
 }

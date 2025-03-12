@@ -1,87 +1,66 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.unisabana.dyas.sampleprj.dao.mybatis.mappers.ClienteMapper">
-    
-    <!-- Consulta para obtener los clientes y sus items rentados -->
+
     <select id="consultarClientes" resultMap="ClienteResult">
         SELECT 
-        c.documento AS cliente_documento,
-        c.nombre AS cliente_nombre,
-        c.telefono AS cliente_telefono,
-        c.direccion AS cliente_direccion,
-        c.email AS cliente_email,
-        c.vetado AS cliente_vetado,
-
-        --
-        ir.CLIENTES_documento AS cliente_doc,
-        ir.ITEMS_id AS rentado_id,
-        ir.fechainiciorenta AS rentado_fechainicio,
-        ir.fechafinrenta AS rentado_fechafin,
-
-        i.id AS item_id,
-        i.nombre AS item_nombre,
-        i.descripcion AS item_descripcion,
-        i.fechalanzamiento AS item_fechaLanzamiento,
-        i.tarifaxdia AS item_tarifaxDia,
-        i.formatorenta AS item_formatoRenta,
-        i.genero AS item_genero,
-
-        ti.id AS tipo_id,
-        ti.descripcion AS tipo_descripcion
-        FROM 
-        VI_CLIENTES c
-        LEFT JOIN 
-        VI_ITEMRENTADO ir ON c.documento = ir.CLIENTES_documento
-        LEFT JOIN 
-        VI_ITEMS i ON ir.ITEMS_id = i.id
-        LEFT JOIN 
-        VI_TIPOITEM ti ON i.TIPOITEM_id = ti.id;
+            c.nombre,
+            c.documento,
+            c.telefono,
+            c.direccion,
+            c.email,
+            c.vetado,
+            ir.CLIENTES_documento,
+            ir.ITEMS_id,
+            DATE(ir.fechainiciorenta) AS fechainiciorenta,
+            DATE(ir.fechafinrenta) AS fechafinrenta,
+            i.id,
+            i.nombre,
+            i.descripcion,
+            i.fechalanzamiento,
+            i.tarifaxdia,
+            i.formatorenta,
+            i.genero,
+            ti.id,
+            ti.descripcion
+        FROM VI_CLIENTES c
+        LEFT JOIN VI_ITEMRENTADO ir ON c.documento = ir.CLIENTES_documento
+        LEFT JOIN VI_ITEMS i ON ir.ITEMS_id = i.id
+        LEFT JOIN VI_TIPOITEM ti ON i.TIPOITEM_id = ti.id;
     </select>
-    
-    <!-- ResultMap para Cliente -->
+
+    <select id="consultarCliente" resultMap="ClienteResult" parameterType="map">
+        SELECT 
+            c.documento,
+            c.nombre,
+            c.telefono,
+            c.direccion,
+            c.email,
+            c.vetado
+        FROM VI_CLIENTES c
+        WHERE c.documento = #{idcliente}
+    </select>
+
+    <insert id="agregarItemRentadoACliente" parameterType="map">
+        INSERT INTO VI_ITEMRENTADO (CLIENTES_documento, ITEMS_id, fechainiciorenta, fechafinrenta)
+        VALUES (#{id}, #{idit}, #{fechainicio}, #{fechafin});
+    </insert>
+
     <resultMap id="ClienteResult" type="Cliente">
-        <id property="documento" column="cliente_documento" />
-        <result property="nombre" column="cliente_nombre" />
-        <result property="telefono" column="cliente_telefono" />
-        <result property="direccion" column="cliente_direccion" />
-        <result property="email" column="cliente_email" />
-        <result property="vetado" column="cliente_vetado" />
-    
+        <id property="documento" column="documento"/>
+        <result property="nombre" column="nombre"/>
+        <result property="telefono" column="telefono"/>
+        <result property="direccion" column="direccion"/>
+        <result property="email" column="email"/>
+        <result property="vetado" column="vetado"/>
         <collection property="rentados" ofType="ItemRentado" resultMap="ItemRentadoResult"/>
     </resultMap>
 
-    
-    <!-- ResultMap para ItemRentado -->
     <resultMap id="ItemRentadoResult" type="edu.unisabana.dyas.samples.entities.ItemRentado">
-        <id property="id" column="rentado_id" />
-        <result property="fechainiciorenta" column="rentado_fechainicio" />
-        <result property="fechafinrenta" column="rentado_fechafin" />
-        <association property="item" javaType="edu.unisabana.dyas.samples.entities.Item"
-             resultMap="ItemResult" />
-    </resultMap>
-
-
-    <!-- ResultMap para Item -->
-    <resultMap id="ItemResult" type="Item">
-        <id property="id" column="item_id" />
-        <result property="nombre" column="item_nombre" />
-        <result property="descripcion" column="item_descripcion" />
-        <result property="fechaLanzamiento" column="item_fechaLanzamiento" />
-        <result property="tarifaxDia" column="item_tarifaxDia" />
-        <result property="formatoRenta" column="item_formatoRenta" />
-        <result property="genero" column="item_genero" />
-        <association property="tipo" javaType="TipoItem"
-             resultMap="edu.unisabana.dyas.sampleprj.dao.mybatis.mappers.TipoItemMapper.TipoItemResult" />
-
-    </resultMap>
-    
-    <!-- ResultMap para TipoItem -->
-    <resultMap id="TipoItemResult" type="TipoItem">
-        <id property="id" column="tipo_id" />
-        <result property="descripcion" column="tipo_descripcion" />
+        <id property="id" column="id"/>
+        <result property="fechainiciorenta" column="fechainiciorenta" typeHandler="edu.unisabana.dyas.samples.entities.CustomDateTypeHandler"/>
+        <result property="fechafinrenta" column="fechafinrenta" typeHandler="edu.unisabana.dyas.samples.entities.CustomDateTypeHandler"/>
+        <association property="item" javaType="edu.unisabana.dyas.samples.entities.Item" resultMap="edu.unisabana.dyas.sampleprj.dao.mybatis.mappers.ItemMapper.ItemResult"/>
     </resultMap>
 
 </mapper>
