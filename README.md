@@ -1,5 +1,6 @@
-### Universidad de la Sabana
-### Diseño y Arquitectura de Software
+# Universidad de la Sabana
+## Diseño y Arquitectura de Software
+### Jorge Esteban Diaz Bernal, Laura Camila Rodriguez Leon, Juan Diego Martinez Escobar
 #### Tecnologías de persistencia - Frameworks de Persistencia - Introducción a MyBatis
 
 En este taller se utilizará un 'framework' de persistencia. La base de datos que se utilizará tiene los siguientes parámetros:
