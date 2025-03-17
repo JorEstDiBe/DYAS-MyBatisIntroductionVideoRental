@@ -171,3 +171,12 @@ En este taller se utilizará un 'framework' de persistencia. La base de datos qu
 ## Parte III (Opcional)
 
 Haga un “refactor” de su aplicación de dibujo trabajada en el Taller de MVC, para generar la opción de guardar el estado en una base de datos local y que a través del uso del patrón DAO, puedan extraer la información para cargar las líneas dibujadas. (Se pueden tener líneas precargadas de ejemplo).
+
+## Ejecución
+--> Se usa localmente la base de datos en MySQL "jdbc:mysql://localhost:3306/rentas?serverTimezone=UTC" Al ejecutar el archivo SQL de creación de tablas: [tables.sql](tables.sql)
+![](img/opc1.png)
+![](img/opc2.png)
+![](img/opc3.png)
+![](img/opc4.png)
+![](img/opc5.png)
+![](img/opc6.png)
