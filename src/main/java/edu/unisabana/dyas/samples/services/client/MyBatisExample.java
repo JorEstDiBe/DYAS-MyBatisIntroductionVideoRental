@@ -53,14 +53,15 @@ public class MyBatisExample {
         SqlSessionFactory sessionfact = getSqlSessionFactory();
 
         while (true) {
-            System.out.println("Hola :)");
+            System.out.println("\nHola :)");
             System.out.println("\nMENU PRINCIPAL");
             System.out.println("1. Ver resumen de clientes");
             System.out.println("2. Buscar un cliente");
             System.out.println("3. Insertar un nuevo item");
             System.out.println("4. Consultar lista de items");
             System.out.println("5. Buscar un item");
-            System.out.println("6. Salir");
+            System.out.println("6. Rentar Item");
+            System.out.println("7. Salir");
             System.out.print("Seleccione una opción: ");
             int opcion = scanner.nextInt();
             scanner.nextLine();
@@ -87,6 +88,9 @@ public class MyBatisExample {
                         buscarItem(sqlss, idItem);
                         break;
                     case 6:
+                        asignarItemACliente(sqlss, scanner);
+                        break;
+                    case 7:
                         System.out.println("Adios :(");
                         scanner.close();
                         return;
@@ -173,4 +177,35 @@ public class MyBatisExample {
             System.out.println("Item no encontrado.");
         }
     }
+    
+    public static void asignarItemACliente(SqlSession sqlss, Scanner scanner) {
+        ClienteMapper clienteMapper = sqlss.getMapper(ClienteMapper.class);
+        ItemMapper itemMapper = sqlss.getMapper(ItemMapper.class);
+
+        System.out.print("Ingrese el ID del cliente: ");
+        int idCliente = scanner.nextInt();
+        scanner.nextLine();
+        Cliente cliente = clienteMapper.consultarCliente(idCliente);
+        if (cliente == null) {
+            System.out.println("Cliente no encontrado.");
+            return;
+        }
+        System.out.print("Ingrese el ID del item a rentar: ");
+        int idItem = scanner.nextInt();
+        scanner.nextLine();
+        Item item = itemMapper.consultarItem(idItem);
+        if (item == null) {
+            System.out.println("Item no encontrado.");
+            return;
+        }
+        System.out.print("Ingrese la fecha de inicio de la renta (YYYY-MM-DD): ");
+        Date fechaInicio = Date.valueOf(scanner.nextLine());
+        System.out.print("Ingrese la cantidad de días de renta: ");
+        int dias = scanner.nextInt();
+        scanner.nextLine();
+        Date fechaFin = Date.valueOf(fechaInicio.toLocalDate().plusDays(dias));
+        clienteMapper.agregarItemRentadoACliente(idCliente, idItem, fechaInicio, fechaFin);
+        System.out.println("Item asignado exitosamente a " + cliente.getNombre() + " hasta " + fechaFin + ".");
+    }
+
 }
